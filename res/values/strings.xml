@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">MTC-Backup</string>
+    
+    <string name="label_radio">Radio</string>
+    <string name="btn_radio_save">Save</string>
+    <string name="btn_radio_restore">Restore</string>
+    
+    <string name="label_music">Music</string>
+    <string name="btn_music_save">Save</string>
+    <string name="btn_music_restore">Restore</string>
+    
+    <string name="toast_copy_success">copy success</string>
+    <string name="toast_copy_failure">copy failure</string>
+    <string name="toast_dir_create_success">backup directory created</string>
+    <string name="toast_dir_create_failure">backup directory create failure</string>
+    
+    <string name="query_save_radio">Save radio settings?</string>
+    <string name="query_restore_radio">Restore radio settings?</string>
+    <string name="query_save_music">Save music settings?</string>
+    <string name="query_restore_music">Restore music settings?</string>
+    
+</resources>

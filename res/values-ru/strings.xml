@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="label_radio">Радио</string>
+    <string name="btn_radio_save">Сохранить</string>
+    <string name="btn_radio_restore">Восстановить</string>
+    
+    <string name="label_music">Музыка</string>
+    <string name="btn_music_save">Сохранить</string>
+    <string name="btn_music_restore">Восстановить</string>
+    
+    <string name="toast_copy_success">Скопировано успешно</string>
+    <string name="toast_copy_failure">Ошибка копирования</string>
+    <string name="toast_dir_create_success">Backup каталог создан</string>
+    <string name="toast_dir_create_failure">Ошибка создания backup каталога</string>
+    
+    <string name="query_save_radio">Сохранить настройки Радио?</string>
+    <string name="query_restore_radio">Восстановить настройки Радио?</string>
+    <string name="query_save_music">Сохранить настройки Музыка?</string>
+    <string name="query_restore_music">Восстановить настройки Музыка?</string>
+    
+</resources>
