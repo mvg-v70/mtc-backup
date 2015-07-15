@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="owners">
+        <item>Father</item>
+        <item>Andrew</item>
+    </string-array>
+</resources>

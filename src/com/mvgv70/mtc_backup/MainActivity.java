@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,8 +18,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
   private final static String TAG = "mtc-backup";
   private final static String GPS_SD = "/mnt/external_sd/";
   private final static String BACKUP_DIR = "mtc-backup";
+  @SuppressLint("SdCardPath")
   private final static String RADIO_XML_PATH = "/data/data/com.microntek.radio/shared_prefs/";
   private final static String RADIO_XML_NAME = "com.microntek.radio_preferences.xml";
+  @SuppressLint("SdCardPath")
   private final static String MUSIC_XML_PATH = "/data/data/com.microntek.music/shared_prefs/";
   private final static String MUSIC_XML_NAME = "com.microntek.music_preferences.xml";
   private int operButton = 0;
@@ -103,16 +105,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
       showToast(getString(R.string.toast_copy_failure));
   }
   
-  // диалог подтверждкения копирования
-  private void confirmDialog(int buttonId, String text) 
+  // диалог подтверждения копирования настроек радио
+  private void confirmDialogRadio(int buttonId, String text) 
   {
     operButton = buttonId;
   	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(text);
+    // OK
     builder.setPositiveButton("OK", 
       new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
-          Log.d(TAG,"OK");
+          Log.d(TAG,"radio, id="+id);
           switch (operButton) {
             case R.id.btnRadioSave:
               RadioSave();
@@ -120,23 +123,39 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btnRadioRestore:
               RadioRestore();
               break;
-            case R.id.btnMusicSave:
-              MusicSave();
-              break;
-            case R.id.btnMusicRestore:
-              MusicRestore();
-              break;
           }
         }
-      });
-    builder.setNegativeButton("Cancel", 
+    });
+    // show
+    builder.setCancelable(true);
+    builder.create();
+    builder.show();
+  }
+  
+  //диалог подтверждения копирования настроек музыки
+  private void confirmDialogMusic(int buttonId, String text) 
+  {
+    operButton = buttonId;
+    String[] owners = getResources().getStringArray(R.array.owners);
+ 	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle(text);
+    // items
+    builder.setItems(owners,
       new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {
-          Log.d(TAG,"Cancel");
-          dialog.cancel();
-        }
-      });
+           Log.d(TAG,"item_id="+id);
+           switch (operButton) {
+             case R.id.btnMusicSave:
+               MusicSave(id);
+               break;
+             case R.id.btnMusicRestore:
+               MusicRestore(id);
+               break;
+           }
+         }
+    });
     // show
+    builder.setCancelable(true);
     builder.create();
     builder.show();
   }
@@ -145,21 +164,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
   private void buttonPressed(int id)
   {
     String text = "";
+    // !!!
+    Log.d(TAG,"btnRadioSave="+R.id.btnRadioSave);
+    Log.d(TAG,"btnRadioRestore="+R.id.btnRadioRestore);
+    Log.d(TAG,"btnMusicSave="+R.id.btnMusicSave);
+    Log.d(TAG,"btnMusicRestore="+R.id.btnMusicRestore);
+    //
     switch (id) {
       case R.id.btnRadioSave:
         text = getString(R.string.query_save_radio);
+        confirmDialogRadio(id, text);
         break;
       case R.id.btnRadioRestore:
-        text = getString(R.string.query_restore_music);
+        text = getString(R.string.query_restore_radio);
+        confirmDialogRadio(id, text);
         break;
       case R.id.btnMusicSave:
         text = getString(R.string.query_save_music);
+        confirmDialogMusic(id, text);
         break;
       case R.id.btnMusicRestore:
         text = getString(R.string.query_restore_music);
+        confirmDialogMusic(id, text);
         break;
 	  }
-    confirmDialog(id, text);
   }
   
   // сохранение настроек радио
@@ -177,16 +205,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
   }
   
   // сохранение настроек mp3
-  private void MusicSave()
+  private void MusicSave(int id)
   {
     Log.d(TAG,"MusicSave()");
-    copyFile(MUSIC_XML_PATH+MUSIC_XML_NAME, GPS_SD+BACKUP_DIR+"/"+MUSIC_XML_NAME);
+    copyFile(MUSIC_XML_PATH+MUSIC_XML_NAME, GPS_SD+BACKUP_DIR+"/"+id+"#"+MUSIC_XML_NAME);
   }
   
   // восстановление настроек mp3
-  private void MusicRestore()
+  private void MusicRestore(int id)
   {
-    Log.d(TAG,"MusicSave()");
-    copyFile(GPS_SD+BACKUP_DIR+"/"+MUSIC_XML_NAME, MUSIC_XML_PATH+MUSIC_XML_NAME);
+    Log.d(TAG,"MusicRestore()");
+    copyFile(GPS_SD+BACKUP_DIR+"/"+id+"#"+MUSIC_XML_NAME, MUSIC_XML_PATH+MUSIC_XML_NAME);
   }
+  
 }
